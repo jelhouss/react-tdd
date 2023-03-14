@@ -9,7 +9,16 @@ function App() {
         building a dummy component following a fully TDD workflow. This is not a
         real app.
       </p>
-      <p>For more, read: https://blog-jelhouss.vercel.app/posts/react-tdd</p>
+      <p>
+        For more, read:{" "}
+        <a
+          href="https://blog-jelhouss.vercel.app/posts/react-tdd"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          https://blog-jelhouss.vercel.app/posts/react-tdd
+        </a>
+      </p>
       <FileUpload />
     </section>
   );
