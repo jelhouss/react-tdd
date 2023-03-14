@@ -1,4 +1,24 @@
 import * as React from "react";
+import axios from "axios";
+
+type UploadStatus = "success" | "error" | "loading" | "idle";
+
+interface StatusTextProps {
+  status: UploadStatus;
+}
+
+function StatusText({ status }: StatusTextProps) {
+  switch (status) {
+    case "success":
+      return <p role="status">Image has been successfully uploaded</p>;
+    case "loading":
+      return <p role="status">Uploading image...</p>;
+    case "error":
+      return <p role="status">Image failed to upload</p>;
+    default:
+      return <p role="status">Image upload status: IDLE</p>;
+  }
+}
 
 interface FileStatus {
   file: File | null;
@@ -6,10 +26,13 @@ interface FileStatus {
 }
 
 function FileUpload() {
-  const [{ fileUploadHasError }, setFileStatus] = React.useState<FileStatus>({
-    file: null,
-    fileUploadHasError: false,
-  });
+  const [{ fileUploadHasError, file }, setFileStatus] =
+    React.useState<FileStatus>({
+      file: null,
+      fileUploadHasError: false,
+    });
+
+  const [uploadStatus, setUploadStatus] = React.useState<UploadStatus>("idle");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -31,9 +54,24 @@ function FileUpload() {
     setFileStatus(fileStatus);
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setUploadStatus("loading");
+
+    axios
+      .post(
+        "/api/file-upload",
+        { file },
+        { headers: { "Content-Type": (file as File).type } }
+      )
+      .then((data) => setUploadStatus("success"))
+      .catch((err) => setUploadStatus("error"));
+  };
+
   return (
     <article>
-      <form>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="avatar">Upload Image</label>
         <input
           type="file"
@@ -55,6 +93,7 @@ function FileUpload() {
           Upload
         </button>
       </form>
+      <StatusText status={uploadStatus} />
     </article>
   );
 }
