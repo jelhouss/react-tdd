@@ -56,4 +56,47 @@ describe("FileUpload", () => {
       expect(errorMessage).toBeInTheDocument();
     });
   });
+
+  it("should display a notification on the upload success", async () => {
+    render(<FileUpload />);
+
+    // 1 - Get the upload button
+    const uploadBtn = screen.getByRole("button", { name: /upload/i });
+
+    // 2 - Get the file input
+    const fileInput: HTMLInputElement = screen.getByLabelText(/upload image/i);
+
+    // 3 - Prepare a file to upload
+    const file = new File(["image"], "image.jpeg", { type: "image/jpeg" });
+
+    // 4 - Assert that no file is added yet
+    expect(fileInput.files?.length).toBe(0);
+
+    // 5 - Simulate a change/upload event to the input and add the file
+    await userEvent.upload(fileInput, file);
+
+    // 6 - Assert that a file is added and loaded
+    expect(fileInput.files?.length).toBe(1);
+
+    // 7 - Simulate a click event on the upload button
+    await userEvent.click(uploadBtn);
+
+    // 8 - Assert the apperance of a loading text
+    waitFor(() => {
+      const uploadStatus = screen.getByRole("status", {
+        name: /uploading image.../i,
+      });
+
+      expect(uploadStatus).toBeInTheDocument();
+    });
+
+    // 9 - Assert the appearance of successful upload text
+    waitFor(() => {
+      const uploadStatus = screen.getByRole("status", {
+        name: /image has been successfully uploaded/i,
+      });
+
+      expect(uploadStatus).toBeInTheDocument();
+    });
+  });
 });
