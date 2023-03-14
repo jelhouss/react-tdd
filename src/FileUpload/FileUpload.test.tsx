@@ -1,6 +1,8 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { rest } from "msw";
 
+import server from "../mocks/server";
 import FileUpload from "./FileUpload";
 
 describe("FileUpload", () => {
@@ -94,6 +96,55 @@ describe("FileUpload", () => {
     waitFor(() => {
       const uploadStatus = screen.getByRole("status", {
         name: /image has been successfully uploaded/i,
+      });
+
+      expect(uploadStatus).toBeInTheDocument();
+    });
+  });
+
+  it("should display a notification on upload failure", async () => {
+    server.use(
+      rest.post("/api/file-upload", async (req, res, ctx) =>
+        res(ctx.status(500))
+      )
+    );
+
+    render(<FileUpload />);
+
+    // 1 - Get the upload button
+    const uploadBtn = screen.getByRole("button", { name: /upload/i });
+
+    // 2 - Get the file input
+    const fileInput: HTMLInputElement = screen.getByLabelText(/upload image/i);
+
+    // 3 - Prepare a file to upload
+    const file = new File(["image"], "image.jpeg", { type: "image/jpeg" });
+
+    // 4 - Assert that no file is added yet
+    expect(fileInput.files?.length).toBe(0);
+
+    // 5 - Simulate a change/upload event to the input and add the file
+    await userEvent.upload(fileInput, file);
+
+    // 6 - Assert that a file is added and loaded
+    expect(fileInput.files?.length).toBe(1);
+
+    // 7 - Simulate a click event on the upload button
+    await userEvent.click(uploadBtn);
+
+    // 8 - Assert the apperance of a loading text
+    waitFor(() => {
+      const uploadStatus = screen.getByRole("status", {
+        name: /uploading image.../i,
+      });
+
+      expect(uploadStatus).toBeInTheDocument();
+    });
+
+    // 9 - Assert the appearance of error upload text
+    waitFor(() => {
+      const uploadStatus = screen.getByRole("status", {
+        name: /image failed to upload/i,
       });
 
       expect(uploadStatus).toBeInTheDocument();
