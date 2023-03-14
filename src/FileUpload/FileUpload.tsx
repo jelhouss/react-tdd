@@ -84,7 +84,7 @@ function FileUpload() {
         />
 
         {fileUploadHasError ? (
-          <p role="alert" id="avatar-field-error">
+          <p style={{ color: "red" }} role="alert" id="avatar-field-error">
             Image type is not supported
           </p>
         ) : null}
