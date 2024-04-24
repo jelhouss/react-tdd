@@ -17,6 +17,14 @@ describe("FileUpload", () => {
     expect(uploadBtn).toBeInTheDocument();
   });
 
+  it("should have a disabled upload button initially", async () => {
+    render(<FileUpload />);
+
+    const uploadBtn = screen.getByRole("button", { name: /upload/i });
+
+    expect(uploadBtn).toBeDisabled();
+  });
+
   it("should disable upload button if file type is not supported", async () => {
     render(<FileUpload />);
 
@@ -27,8 +35,6 @@ describe("FileUpload", () => {
     const file = new File(["image"], "image.png", { type: "image/png" });
 
     expect(fileInput.files?.length).toBe(0);
-
-    expect(uploadBtn).not.toBeDisabled();
 
     await userEvent.upload(fileInput, file, { applyAccept: false });
 
