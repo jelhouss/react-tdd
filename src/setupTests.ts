@@ -1,11 +1,7 @@
-import { expect, afterEach, beforeAll, afterAll } from "vitest";
+import "@testing-library/jest-dom";
 import { cleanup } from "@testing-library/react";
-import * as matchers from "@testing-library/jest-dom/matchers";
 
 import server from "./mocks/server";
-
-// extends Vitest's (global) expect method with methods from react-testing-library
-expect.extend(matchers);
 
 // establish API mocking before all tests
 beforeAll(() => {
