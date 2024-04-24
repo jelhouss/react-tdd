@@ -89,7 +89,7 @@ function FileUpload() {
           </p>
         ) : null}
 
-        <button type="submit" disabled={fileUploadHasError}>
+        <button type="submit" disabled={file === null}>
           Upload
         </button>
       </form>
