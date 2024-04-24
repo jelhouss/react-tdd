@@ -4,7 +4,7 @@ Vite.js 4, React.js 18, and Node.js 18
 
 In this example, we defined some stories and implemented them by building a dummy component following a fully TDD workflow. This is not a real app.
 
-More: https://www.jh.tn/posts/react-tdd
+More: https://www.jh.tn/blog/react-tdd
 
 ## Docker
 

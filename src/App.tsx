@@ -12,11 +12,11 @@ function App() {
       <p>
         For more, read:{" "}
         <a
-          href="https://blog-jelhouss.vercel.app/posts/react-tdd"
+          href="https://www.jh.tn/blog/react-tdd"
           target="_blank"
           rel="noopener noreferrer"
         >
-          https://blog-jelhouss.vercel.app/posts/react-tdd
+          https://www.jh.tn/blog/react-tdd
         </a>
       </p>
       <FileUpload />
