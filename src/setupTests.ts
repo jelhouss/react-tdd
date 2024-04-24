@@ -9,7 +9,7 @@ expect.extend(matchers);
 
 // establish API mocking before all tests
 beforeAll(() => {
-  server.printHandlers();
+  server.listHandlers();
   server.listen({ onUnhandledRequest: "warn" });
 });
 

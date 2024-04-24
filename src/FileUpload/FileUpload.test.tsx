@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { rest } from "msw";
+import { HttpResponse, http } from "msw";
 
 import server from "../mocks/server";
 import FileUpload from "./FileUpload";
@@ -104,8 +104,12 @@ describe("FileUpload", () => {
 
   it("should display a notification on upload failure", async () => {
     server.use(
-      rest.post("/api/file-upload", async (req, res, ctx) =>
-        res(ctx.status(500))
+      http.post(
+        "/api/file-upload",
+        async () =>
+          new HttpResponse(null, {
+            status: 500,
+          })
       )
     );
 

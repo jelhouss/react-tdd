@@ -1,10 +1,13 @@
-import { rest } from "msw";
+import { HttpResponse, http } from "msw";
 
 const handlers = [
-  rest.post("/api/file-upload", async (req, res, ctx) => {
-    // dummy example
-    return res(ctx.status(201));
-  }),
+  http.post(
+    "/api/file-upload",
+    async () =>
+      new HttpResponse(null, {
+        status: 201,
+      })
+  ),
 ];
 
 export default handlers;
